@@ -1,0 +1,17 @@
+<div class='col-12 offset-md-4'>
+    <p class="search-form">
+      <% if @range == "User" %>
+        <% @users.each do |user| %>
+          <!--ユーザーの名前を表示-->
+          <%= user.name %>
+        <% end %>
+      <% else %>
+        <% @books.each do |book| %>
+          <!--投稿のタイトルを表示-->
+          <%= book.title %>
+          <!--投稿の本文を表示-->
+          <%= book.body %>
+        <% end %>
+      <% end %>
+    </p>
+</div>
