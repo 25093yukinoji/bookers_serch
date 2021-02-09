@@ -1,17 +1,60 @@
-<div class='col-12 offset-md-4'>
-    <p class="search-form">
-      <% if @range == "User" %>
-        <% @users.each do |user| %>
-          <!--ユーザーの名前を表示-->
-          <%= user.name %>
+<div class='container px-5 px-sm-0'>
+  <div class='col-12'>
+      <p class="search-form">
+        <% if @range == "User" %>
+          <table class='table'>
+            <thead>
+              <tr>
+                <th>image</th>
+                <th>name</th>
+                <th colspan="3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td><%= attachment_image_tag(user, :profile_image, :fill, 50, 50, fallback: "no-image-icon.jpg") %></td>
+                  <td><%= user.name %></td>
+                  <td>フォロー数: <%= user.followings.count %></td>
+                  <td>フォロワー数: <%= user.followers.count %></td>
+                  <td>
+                    <% if current_user != user %>
+                      <% if current_user.following?(user) %>
+                        <%= link_to "フォロー外す", user_relationships_path(user.id), method: :delete %>
+                      <% else %>
+                        <%= link_to "フォローする", user_relationships_path(user.id), method: :post %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td><%= link_to 'Show', user_path(user), class: "user_#{user.id}" %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <table class='table table-hover table-inverse'>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Opinion</th>
+                <th colspan="3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @books.each do |book| %>
+                <tr>
+                  <td><%= link_to user_path(book.user) do %>
+                    <%= attachment_image_tag(book.user, :profile_image, :fill, 50, 50, fallback: "no-image-icon.jpg") %>
+                    <% end %>
+                  </td>
+                  <td><%= link_to book.title, book_path(book), class: "book_#{book.id}" %></td>
+                  <td><%= book.body %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         <% end %>
-      <% else %>
-        <% @books.each do |book| %>
-          <!--投稿のタイトルを表示-->
-          <%= book.title %>
-          <!--投稿の本文を表示-->
-          <%= book.body %>
-        <% end %>
-      <% end %>
-    </p>
+      </p>
+  </div>
 </div>
